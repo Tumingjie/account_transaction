@@ -1,0 +1,128 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 8899
+  servlet:
+    # 应用的访问路径
+    context-path: /
+
+# RocketMQ NameServer 地址
+rocketmq:
+  name-server: 127.0.0.1:9876
+
+  producer:
+    group: producer_group     #生产者组名
+    send-message-timeout: 3000 # 消息发送超时时间，单位毫秒
+    retry-times-when-send-failed: 2 # 发送失败时的重试次数
+    max-message-size: 4194304 # 消息最大大小，单位字节，默认为4MB
+
+  consumer:
+    group: consumer_group     #消费者组名
+    consume-thread-min: 1 # 消费者线程池最小线程数
+    consume-thread-max: 10 # 消费者线程池最大线程数
+    consume-message-batch-max-size: 1 # 批量消费时最大消息数
+
+  listener:
+    thread-max: 64 # 消息监听线程最大数
+    thread-min: 20 # 消息监听线程最小数
+
+security:
+  # 登出路径
+  logout-url: /logout
+  # 匿名路径
+  anonymous:
+    - /**
+
+# 日志配置
+logging:
+  level:
+    com:
+      level:
+        queue:
+          mapper: debug
+  config: classpath:logback.xml
+
+spring:
+  profiles:
+    active: dev
+
+mybatis-plus:
+  mapperPackage: com.level.**.mapper
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  typeAliasesPackage: com.level.**.domain
+
+  configuration:
+    # 自动驼峰命名规则（camel case）映射
+    # 如果您的数据库命名符合规则无需使用 @TableField 注解指定数据库字段名
+    mapUnderscoreToCamelCase: true
+    # 默认枚举处理类,如果配置了该属性,枚举将统一使用指定处理器进行处理
+    # org.apache.ibatis.type.EnumTypeHandler : 存储枚举的名称
+    # org.apache.ibatis.type.EnumOrdinalTypeHandler : 存储枚举的索引
+    # com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler : 枚举类需要实现IEnum接口或字段标记@EnumValue注解.
+    defaultEnumTypeHandler: org.apache.ibatis.type.EnumTypeHandler
+    # 当设置为 true 的时候，懒加载的对象可能被任何懒属性全部加载，否则，每个属性都按需加载。需要和 lazyLoadingEnabled 一起使用。
+    aggressiveLazyLoading: true
+    # MyBatis 自动映射策略
+    # NONE：不启用自动映射
+    # PARTIAL：只对非嵌套的 resultMap 进行自动映射
+    # FULL：对所有的 resultMap 都进行自动映射
+    autoMappingBehavior: PARTIAL
+    # MyBatis 自动映射时未知列或未知属性处理策
+    # NONE：不做任何处理 (默认值)
+    # WARNING：以日志的形式打印相关警告信息
+    # FAILING：当作映射失败处理，并抛出异常和详细信息
+    autoMappingUnknownColumnBehavior: NONE
+    # Mybatis一级缓存，默认为 SESSION
+    # SESSION session级别缓存，同一个session相同查询语句不会再次查询数据库
+    # STATEMENT 关闭一级缓存
+    localCacheScope: SESSION
+    # 开启Mybatis二级缓存，默认为 true
+    cacheEnabled: false
+    # 更详细的日志输出 会有性能损耗 org.apache.ibatis.logging.stdout.StdOutImpl
+    # 关闭日志记录 (可单纯使用 p6spy 分析) org.apache.ibatis.logging.nologging.NoLoggingImpl
+    # 默认日志输出 org.apache.ibatis.logging.slf4j.Slf4jImpl
+    logImpl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+  global-config:
+    db-config:
+      id-type: auto
+
+
+# Swagger配置
+swagger:
+  # 是否开启swagger
+  enabled: true
+  #预约与排队模块路径
+  queue-api-paths: '/queue.*'
+
+  # 请求前缀
+  pathMapping:
+  # 标题
+  title: 'api文档'
+  # 描述
+  description: 'api文档'
+  # 版本
+  version: '版本号: @queueToCall.version@'
+  # 作者信息
+  contact:
+    name: Lion Li
+    email: crazylionli@163.com
+    url: https://gitee.com/JavaLionLi/RuoYi-Vue-Plus
+  groups:
+    - name: 演示案例
+      basePackage: com.level.demo
+    - name: 系统模块
+      basePackage: com.level.admin
+
+# 项目相关配置
+ruoyi:
+  # 名称
+  name: LV-QueueToCall
+  # 版本
+  version: '@queueToCall.version@'
+  # 版权年份
+  copyrightYear: 2021
+  # 实例演示开关
+  demoEnabled: true
+  # 获取ip地址开关
+  addressEnabled: true
