@@ -8,7 +8,7 @@ server:
 
 # RocketMQ NameServer 地址
 rocketmq:
-  name-server: 127.0.0.1:9876
+  name-server: localhost:9876
 
   producer:
     group: producer_group     #生产者组名
@@ -25,7 +25,7 @@ rocketmq:
   listener:
     thread-max: 64 # 消息监听线程最大数
     thread-min: 20 # 消息监听线程最小数
-
+    
 security:
   # 登出路径
   logout-url: /logout
