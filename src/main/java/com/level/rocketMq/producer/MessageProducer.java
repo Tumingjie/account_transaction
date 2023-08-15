@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 public class MessageProducer {
@@ -25,6 +26,8 @@ public class MessageProducer {
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+
+    final ReentrantLock reentrantLock = new ReentrantLock(true);
 
     public void sendMsgInTransaction(TransactionBo bo){
         try {
@@ -40,12 +43,19 @@ public class MessageProducer {
 
 
     public int getUniqueOrderKey(){
-        List<Transaction> transactionList = transactionService.getMaxTransactionId();
-        Optional<Transaction> max = transactionList.stream().max(Comparator.comparing(Transaction::getId));
-        if(max.isPresent()){
-            return max.get().getId()+1;
+        try {
+            reentrantLock.lock();
+            List<Transaction> transactionList = transactionService.getMaxTransactionId();
+            Optional<Transaction> max = transactionList.stream().max(Comparator.comparing(Transaction::getId));
+            if(max.isPresent()){
+                return max.get().getId()+1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            reentrantLock.unlock();
+            return 1;
         }
-        return 1;
     }
 
 }
