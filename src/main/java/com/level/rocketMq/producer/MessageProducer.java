@@ -43,18 +43,19 @@ public class MessageProducer {
 
 
     public int getUniqueOrderKey(){
+        int key = 1;
         try {
             reentrantLock.lock();
             List<Transaction> transactionList = transactionService.getMaxTransactionId();
             Optional<Transaction> max = transactionList.stream().max(Comparator.comparing(Transaction::getId));
             if(max.isPresent()){
-                return max.get().getId()+1;
+                key = max.get().getId()+1;
             }
         }catch (Exception e){
             e.printStackTrace();
         }finally {
             reentrantLock.unlock();
-            return 1;
+            return key;
         }
     }
 
