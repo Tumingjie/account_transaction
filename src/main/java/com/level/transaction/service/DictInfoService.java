@@ -11,4 +11,6 @@ public interface DictInfoService extends IService<DictInfo> {
     List<DictInfo> getDictInfos(DictInfoBo bo);
 
     boolean saveDictInfo(DictInfo dictInfo);
+
+    DictInfo getDictInfo(Integer id,String code);
 }

@@ -7,10 +7,7 @@ import com.level.utils.domain.AjaxResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,11 +25,17 @@ public class DictInfoController {
         return AjaxResult.success(dictInfoService.getDictInfos(bo));
     }
 
-    @ApiOperation("查询字典信息列表")
+    @ApiOperation("存储字典信息列表")
     @PostMapping("/saveDictInfo")
     public AjaxResult<Void> saveDictInfo(@RequestBody DictInfo info){
         boolean done = dictInfoService.saveDictInfo(info);
         return done ? AjaxResult.success("成功！") : AjaxResult.error("失败！");
+    }
+
+    @ApiOperation("查询字段信息列表")
+    @GetMapping("/getDictInfo")
+    public AjaxResult<DictInfo> getDictInfo(@RequestParam("id") Integer id,@RequestParam("code")String code){
+        return AjaxResult.success(dictInfoService.getDictInfo(id,code));
     }
 
 }

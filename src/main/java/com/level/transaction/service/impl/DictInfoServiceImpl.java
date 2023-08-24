@@ -8,12 +8,16 @@ import com.level.transaction.domain.bo.DictInfoBo;
 import com.level.transaction.mapper.DictInfoMapper;
 import com.level.transaction.service.DictInfoService;
 import com.level.utils.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class DictInfoServiceImpl extends ServiceImpl<DictInfoMapper, DictInfo> implements DictInfoService {
+
+    @Autowired
+    DictInfoMapper dictInfoMapper;
 
     @Override
     public List<DictInfo> getDictInfos(DictInfoBo bo) {
@@ -26,7 +30,19 @@ public class DictInfoServiceImpl extends ServiceImpl<DictInfoMapper, DictInfo> i
 
     @Override
     public boolean saveDictInfo(DictInfo dictInfo) {
-        return save(dictInfo);
+        return dictInfoMapper.saveDictInfo(dictInfo) > 0 ? true : false;
+    }
+
+    @Override
+    public DictInfo getDictInfo(Integer id, String code) {
+        DictInfo dictInfo = null;
+        if(id != null){
+            dictInfo = dictInfoMapper.getDictInfo(id);
+        }
+        if(code != null){
+            dictInfo = dictInfoMapper.getDictInfo(code);
+        }
+        return dictInfo;
     }
 
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.level.transaction.mapper.DictInfoMapper">
+
+    <insert id="saveDictInfo" parameterType="com.level.transaction.domain.DictInfo">
+        INSERT INTO dict_info
+            (code, value, pinyin, no, description)
+        VALUES(#{code}, #{value}, #{pinyin}, #{no}, #{description});
+    </insert>
+
+    <select id="getDictInfo" resultType="com.level.transaction.domain.DictInfo" parameterType="java.lang.Integer">
+        select * from dict_info where id = #{id}
+    </select>
+
+    <select id="getDictInfo" resultType="com.level.transaction.domain.DictInfo" parameterType="java.lang.String">
+        select * from dict_info where code = #{code}
+    </select>
+
+</mapper>
