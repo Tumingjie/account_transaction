@@ -16,7 +16,7 @@ import java.security.Key;
 @Component
 public class AESEncryptionUtils {
 
-    @Value("${AESEncryption.key:eYPBwVlM+1bOapjCbRN9xw==}")
+    @Value("${Encryption.key:eYPBwVlM+1bOapjCbRN9xw==}")
     private String key;
 
     private static final String ENCODING = "UTF-8";
@@ -58,9 +58,9 @@ public class AESEncryptionUtils {
     /**
      * 供调用的sm4加密方法
      *
-     * key   16进制密钥（忽略大小写）
+     * key   base64密钥
      * @param paramStr 待加密字符串
-     * @return 返回16进制的加密字符串
+     * @return 返回base64的加密字符串
      * 密文长度不固定，会随着被加密字符串长度的变化而变化
      */
     public String encryptEcb(String paramStr) {
@@ -78,8 +78,8 @@ public class AESEncryptionUtils {
     /**
      * 供调用的sm4解密方法
      *
-     * key     16进制密钥
-     * @param cipherText 16进制的加密字符串（忽略大小写）
+     * key     base64密钥
+     * @param cipherText base64加密字符串
      * @return 解密后的字符串
      * @throws Exception
      * @explain 解密模式：采用ECB
@@ -129,23 +129,24 @@ public class AESEncryptionUtils {
     /**
      * SM4校验加密前后的字符串是否为同一数据
      *
-     * key     16进制密钥（忽略大小写）
-     * @param cipherText 16进制加密后的字符串
-     * @param paramStr   加密前的字符串
+     * key     base64密钥
+     * @param base64CipherText base64加密后的字符串
+     * @param base64ParamStr   加密前的字符串
      * @return 是否为同一数据
      */
-    public boolean verifyEcb(String cipherText, String paramStr) throws Exception {
-        // 用于接收校验结果
+    public boolean verifyEcb(String base64CipherText, String base64ParamStr) throws Exception {
         boolean flag = false;
-        // hexString-->byte[]
-        byte[] keyData = ByteUtils.fromHexString(key);
-        // 将16进制字符串转换成数组
-        byte[] cipherData = ByteUtils.fromHexString(cipherText);
+        // Base64字符串解码为byte数组
+        byte[] keyData = Base64.getDecoder().decode(key);
+        byte[] cipherData = Base64.getDecoder().decode(base64CipherText);
+
         // 解密
         byte[] decryptData = decryptEcbPadding(keyData, cipherData);
-        // 将原字符串转换成byte[]
-        byte[] srcData = paramStr.getBytes(ENCODING);
-        // 判断2个数组是否一致
+
+        // Base64字符串解码为byte数组
+        byte[] srcData = Base64.getDecoder().decode(base64ParamStr);
+
+        // 判断两个数组是否一致
         flag = Arrays.equals(decryptData, srcData);
         return flag;
     }
