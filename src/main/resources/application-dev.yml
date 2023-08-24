@@ -62,3 +62,8 @@ spring:
 level:
   queueTask: False
   executeTime: '*/30 * * * * ?'
+
+AESEncryption:
+  key: eYPBwVlM+1bOapjCbRN9xw==
+  # 1324692348123259
+  # 51d95b1dc43a9faaad0570f81c755fcc

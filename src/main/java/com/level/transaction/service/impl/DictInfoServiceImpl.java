@@ -24,4 +24,9 @@ public class DictInfoServiceImpl extends ServiceImpl<DictInfoMapper, DictInfo> i
         return list(wrapper);
     }
 
+    @Override
+    public boolean saveDictInfo(DictInfo dictInfo) {
+        return save(dictInfo);
+    }
+
 }
